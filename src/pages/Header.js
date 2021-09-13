@@ -20,7 +20,7 @@ export const Header = (props) => {
         <>
             <VStack
                 alignItems="end"
-                bg={show && "#116979"}
+                bg={show && colorMode === "light" ? "#116979" : show && colorMode === "dark" && "#1a202c"}
             >
                 <Box
                     as="span"
@@ -32,10 +32,18 @@ export const Header = (props) => {
                     pt="10px"
                 >
                     {show ?
-                        <IconButton icon={<FaTimes color="#116979" />} />
+                        <IconButton icon={
+                            <FaTimes color={show && colorMode === "light" ?
+                                "#116979" : show && colorMode === "dark" && "#ffffff"
+                            } />
+                        } />
 
                         :
-                        <IconButton icon={<FaStream color="#116979" />} />
+                        <IconButton icon={
+                            <FaStream color={!show && colorMode === "light" ?
+                                "#116979" : !show && colorMode === "dark" && "#ffffff"
+                            } />
+                        } />
                     }
                 </Box>
             </VStack>
@@ -43,7 +51,7 @@ export const Header = (props) => {
             <Box
                 display={{ base: show ? "block" : "none", md: "block" }}
                 bg={colorMode === "light" && "#116979"}
-                boxShadow={colorMode === "dark" && "lg"}
+                boxShadow={colorMode === "light" ? "lg" : colorMode === "dark" && "lg"}
                 w="100%" p={4} color="white"
             >
                 {

@@ -6,6 +6,7 @@ import {
   Center,
   useToast
 } from "@chakra-ui/react";
+import { useMediaQuery } from "@chakra-ui/media-query";
 import { BoxComponent } from "../components/BoxComponent";
 
 /**
@@ -22,6 +23,12 @@ export const PokemonDetails = (props) => {
     () => JSON.parse(localStorage.getItem("pokemonStorage")) || []
   );
   const toast = useToast();
+  const [isExtraSmallerScreen, isSmallScreen, isMediumScreen, isLargeScreen] = useMediaQuery([
+    "(max-width:414px)",
+    "(max-width:678px)",
+    "(max-width:900px)",
+    "(max-width:1300px)"
+  ]);
 
   const allPokemonData = async (url) => {
     return new Promise((resolve, reject) => {
@@ -69,11 +76,9 @@ export const PokemonDetails = (props) => {
 
 
   function addToTeam(detail) {
-    const newPokemon = pokemon.filter(pok => {
+    const newPokemon = pokemon.filter(pok => { //filtering the array and return only matched pokemon 
       return pok.pokemon.id === detail.id
     });
-
-    console.log(!newPokemon.length)
 
     if (!newPokemon.length) {
       setPokemon([
@@ -82,7 +87,7 @@ export const PokemonDetails = (props) => {
           pokemon: detail
         }
       ])
-    }else{
+    } else {
       toast({
         title: `${detail.name} Pokemon already added to your team!`,
         status: "error",
@@ -94,11 +99,17 @@ export const PokemonDetails = (props) => {
     }
   }
 
+
   return (
     <Container maxW="container.xl" pt="20px">
       {
         loading ? <Center><Heading fontSize="lg">loading...</Heading></Center> :
-          <Grid templateColumns={"repeat(4, 1fr)"} gap={6}>
+          <Grid
+            templateColumns={isExtraSmallerScreen ?
+              "repeat(1, 1fr)" : isSmallScreen ?
+                "repeat(2, 1fr)" : isMediumScreen ?
+                  "repeat(3, 1fr)" : isLargeScreen ?
+                    "repeat(4, 1fr)" : "repeat(5, 1fr)"} gap={6}>
             {
               pokemonDetail.map((detail, index) => {
                 return (

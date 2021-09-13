@@ -7,9 +7,9 @@ import {
     Text,
     Center,
     Heading,
-    GridItem,
     useToast
 } from "@chakra-ui/react";
+import { useMediaQuery } from "@chakra-ui/media-query";
 import { PokemonComponent } from "../components/PokemonComponent";
 
 /**
@@ -20,6 +20,12 @@ import { PokemonComponent } from "../components/PokemonComponent";
 export const TeamPokemon = () => {
     const [pokemo, setPokemo] = React.useState([]);
     const toast = useToast();
+    const [isExtraSmallerScreen, isSmallScreen, isMediumScreen, isLargeScreen] = useMediaQuery([
+        "(max-width:414px)",
+        "(max-width:678px)",
+        "(max-width:900px)",
+        "(max-width:1300px)"
+    ]);
 
     useEffect(() => {
         const getPokemonFromLocalStorage = localStorage.getItem("pokemonStorage");
@@ -46,7 +52,7 @@ export const TeamPokemon = () => {
     }
 
 
-    if (!pokemo  || !pokemo.length) {
+    if (!pokemo || !pokemo.length) {
         return (
             <VStack
             >
@@ -61,7 +67,12 @@ export const TeamPokemon = () => {
         <Container maxW="container.xl" pt="20px">
             {
                 pokemo.length < 0 ? <Center><Heading fontSize="lg">loading...</Heading></Center> :
-                    <Grid templateColumns="repeat(4, 1fr)" gap={6}>
+                    <Grid
+                        templateColumns={isExtraSmallerScreen ?
+                            "repeat(1, 1fr)" : isSmallScreen ?
+                                "repeat(2, 1fr)" : isMediumScreen ?
+                                    "repeat(3, 1fr)" : isLargeScreen ?
+                                        "repeat(4, 1fr)" : "repeat(5, 1fr)"} gap={6}>
                         {
                             pokemo.map((pok, index) => {
                                 return (
